@@ -1,0 +1,4 @@
+node_modules
+<% if (node) { %><% if (!heroku) { %>/server/public<% } %>
+.env<% } else { %>
+/dist<% } %>

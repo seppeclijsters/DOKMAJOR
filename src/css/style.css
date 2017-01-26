@@ -1,0 +1,27 @@
+@import 'reset';
+
+html, body {
+  width: 600px;
+  margin: 0 auto;
+  height: 100%;
+  overflow: hidden;
+}
+
+p {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 5rem;
+}
+
+.hallo {
+  display: flex;
+}
+
+
+@media (width <= 1360px) {
+
+  .hallo {
+    flex-flow: column;
+  }
+
+}

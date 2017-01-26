@@ -1,7 +1,29 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="description" content="DOK Gent"/>
+    <meta name="author" content="Seppe Clijsters"/>
+    <meta name="keywords" content="Dok Gent evenementen ontmoetingsplek creativiteit"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript">
+
+      WebFontConfig = {
+        custom: {
+          families: ['jaapokki'],
+          urls: ['assets/fonts/jaapokki/jaapokki.css']
+        }
+      };
+
+      (function() {
+        var wf = document.createElement('script');
+        wf.src = 'js/vendors/webfontloader.js';
+        wf.type = 'text/javascript';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(wf, s);
+      })();
+
+    </script>
     <title>DOK</title>
     <?php echo $css;?>
   </head>

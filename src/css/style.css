@@ -1,27 +1,25 @@
 @import 'reset';
 
-html, body {
-  width: 600px;
-  margin: 0 auto;
-  height: 100%;
-  overflow: hidden;
+.container {
+  width: 960px;
+  margin: auto;
 }
 
-p {
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 5rem;
-}
+.menu {
+  margin-top: 3rem;
+  font-family: jaapokki;
+  font-size: 3rem;
 
-.hallo {
-  display: flex;
-}
+  &-items {
+    display: flex;
 
-
-@media (width <= 1360px) {
-
-  .hallo {
-    flex-flow: column;
+    & a {
+      text-decoration: none;
+      color: #0097e0;
+    }
   }
+}
 
+.menu-item {
+  margin-left: 5rem;
 }

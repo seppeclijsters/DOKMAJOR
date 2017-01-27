@@ -1,33 +1,93 @@
 const path = require(`path`);
+
 const webpack = require(`webpack`);
+const {HotModuleReplacementPlugin} = webpack;
+const {UglifyJsPlugin} = webpack.optimize;
+
+const CopyWebpackPlugin = require(`copy-webpack-plugin`);
+const ExtractTextWebpackPlugin = require(`extract-text-webpack-plugin`);
+const configHtmls = require(`webpack-config-htmls`)();
+
+const extractCSS = new ExtractTextWebpackPlugin(`css/style.css`);
 
 // change for production build on different server path
 const publicPath = `/`;
 
+const port = 3000;
+
+// hard copy assets folder for:
+// - srcset images (not loaded through html-loader )
+// - json files (through fetch)
+// - fonts via WebFontLoader
+
+const copy = new CopyWebpackPlugin([{
+  from: `./src/assets`,
+  to: `assets`
+}], {
+  ignore: [ `.DS_Store` ]
+});
+
 const config = {
-  entry: {
-    style: `./src/css/style.css`,
-    script: `./src/js/script.js`
+
+  // no HTML entry points for production build (bundled in JavaScript)
+  entry: [
+    //require.resolve(`react-dev-utils/webpackHotDevClient`),
+    `./src/css/style.css`,
+    `./src/js/script.js`
+  ],
+
+  resolve: {
+    // import files without extension import ... from './Test'
+    extensions: [`.js`, `.jsx`, `.css`]
   },
+
   output: {
-    path: path.resolve(`./dist`),
-    filename: `js/[name].js`,
-    publicPath: publicPath
+    path: path.join(__dirname, `dist`),
+    filename: `js/script.js`,
+    publicPath
   },
-  devtool: `sourcemap`,
+
+  devtool: `source-map`,
+
   devServer: {
     contentBase: `./src`,
-    historyApiFallback: true,
+    historyApiFallback: true, // for use with client side router
     hot: true,
-    port: 3000
+    port
   },
-  resolve: {
-    extensions: [`.js`, `.css`]
-  },
+
   module: {
+
     rules: [
       {
-        test: /\.(js)$/,
+        test: /\.css$/,
+        use: [
+          `style-loader`,
+          {
+            loader: `css-loader`,
+            options: {
+              importLoaders: 1
+            }
+          },
+          {
+            loader: `postcss-loader`
+          }
+        ]
+      },
+      {
+        test: /\.html$/,
+        loader: `html-loader`,
+        options: {
+          attrs: [
+            `audio:src`,
+            `img:src`,
+            `video:src`,
+            `source:srcset`
+          ] // read src from video, img & audio tag
+        }
+      },
+      {
+        test: /\.(jsx?)$/,
         exclude: /node_modules/,
         use: [
           {
@@ -40,15 +100,41 @@ const config = {
             }
           }
         ]
+      },
+      {
+        test: /\.(svg|png|jpe?g|gif|webp)$/,
+        loader: `url-loader`,
+        options: {
+          limit: 1000, // inline if < 1 kb
+          context: `./src`,
+          name: `[path][name].[ext]`
+        }
+      },
+      {
+        test: /\.(mp3|mp4|wav)$/,
+        loader: `file-loader`,
+        options: {
+          context: `./src`,
+          name: `[path][name].[ext]`
+        }
       }
     ]
-  }
+
+  },
+
+  plugins: [
+    new HotModuleReplacementPlugin()
+  ]
+
 };
 
 if (process.env.NODE_ENV === `production`) {
-  const ExtractTextWebpackPlugin = require(`extract-text-webpack-plugin`);
-  const {UglifyJsPlugin} = webpack.optimize;
-  const extractCSS = new ExtractTextWebpackPlugin(`css/style.css`);
+
+  //remove hot reloading client
+  config.entry.shift();
+
+  //remove CSS rule and add new one, css in external file
+  config.module.rules.shift();
   config.module.rules.push({
     test: /\.css$/,
     loader: extractCSS.extract([
@@ -63,45 +149,35 @@ if (process.env.NODE_ENV === `production`) {
       }
     ])
   });
+
   //image optimizing
   config.module.rules.push({
     test: /\.(svg|png|jpe?g|gif)$/,
     loader: `image-webpack-loader`,
     enforce: `pre`
   });
+
   config.plugins = [
     extractCSS,
+    copy,
     new UglifyJsPlugin({
       sourceMap: true, // false returns errors.. -p + plugin conflict
       comments: false
     })
   ];
+
 } else {
-  config.module.rules.push({
-    test: /\.css$/,
-    use: [
-      {
-        loader: `style-loader`
-      },
-      {
-        loader: `css-loader`,
-        options: {
-          importLoaders: 1
-        }
-      },
-      {
-        loader: `postcss-loader`
-      }
-    ]
-  });
+
+  // only include HTMLs in NODE_ENV=development
+  // for Hot Reloading
+  config.entry = [...config.entry, ...configHtmls.entry];
 
   config.performance = {
     hints: false
   };
 
-  config.plugins = [
-    new webpack.HotModuleReplacementPlugin()
-  ];
 }
+
+config.plugins = [...config.plugins, ...configHtmls.plugins];
 
 module.exports = config;

@@ -1,6 +1,17 @@
-@import 'reset';
+@import 'reset.css';
 
-.container {
+:root {
+  --green: #199f00;
+  --blue: #0097e0;
+  --grey: #f5f5f6;
+  --activities: {
+    width: 300px;
+    height: 250px;
+    background-color: var(--green);
+  }
+}
+
+.containers {
   width: 960px;
   margin: auto;
 }
@@ -8,18 +19,131 @@
 .menu {
   margin-top: 3rem;
   font-family: jaapokki;
-  font-size: 3rem;
+  font-size: 2.5rem;
 
   &-items {
     display: flex;
+    align-items: center;
 
     & a {
       text-decoration: none;
-      color: #0097e0;
+      color: var(--blue);
     }
   }
 }
 
 .menu-item {
   margin-left: 5rem;
+}
+
+.menu-item-active {
+  margin-left: 5rem;
+}
+
+.header-background {
+  margin-top: -2rem;
+  margin-left: 4rem;
+  margin-right: 4rem;
+  height: 70rem;
+  background-color: #fe0;
+
+  & .line {
+    margin-top: 5rem;
+    height: 9rem;
+    border-left: solid .4rem var(--green);
+  }
+}
+
+.startDate {
+  display: flex;
+  flex-direction: column;
+  width: 7rem;
+  height: 20rem;
+  padding-top: 15rem;
+  margin-left: -3rem;
+  font-size: 6rem;
+  font-family: jaapokki;
+  color: var(--green);
+  border-bottom: solid .4rem var(--green);
+
+  & .month {
+    font-size: 4rem;
+    margin-top: -.3rem;
+  }
+}
+
+.endDate {
+  display: flex;
+  flex-direction: column;
+  width: 7rem;
+  height: 5rem;
+  margin-left: -3rem;
+  font-size: 6rem;
+  font-family: jaapokki;
+  color: var(--green);
+  border-bottom: solid .4rem var(--green);
+
+  & .month {
+    font-size: 4rem;
+    margin-top: -.8rem;
+  }
+}
+
+.flex {
+  margin-left: 50rem;
+  display: flex;
+  flex-direction: column;
+  font-family: jaapokki;
+}
+
+.tagline {
+  padding-left: .7rem;
+  margin-top: -18rem;
+  font-size: 4rem;
+  color: var(--green);
+  border-left: solid .4rem var(--green);
+}
+
+.dok {
+  margin-top: 1rem;
+  margin-left: -.4rem;
+  font-size: 6rem;
+  color: var(--grey);
+}
+
+.activities-title {
+  margin-top: 2rem;
+  width: 50rem;
+  color: var(--blue);
+  font-family: jaapokki;
+  font-size: 3rem;
+  border-bottom: solid .6rem var(--blue);
+  text-align: right;
+  margin-left: -25rem;
+}
+
+.activities {
+  margin-top: 2rem;
+  display: flex;
+
+  &-one {
+    @apply --activities;
+    margin-left: 15px;
+
+    & .activities-one-picture {
+      background-image: url(../assets/images/activityOne.png);
+      width: 300px;
+      height: 200px;
+    }
+  }
+
+  &-two {
+    @apply --activities;
+    margin: 0 15px;
+  }
+
+  &-three {
+    @apply --activities;
+    margin-right: 15px;
+  }
 }

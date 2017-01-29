@@ -10,8 +10,8 @@
 
       WebFontConfig = {
         custom: {
-          families: ['jaapokki'],
-          urls: ['assets/fonts/jaapokki/jaapokki.css']
+          families: ['jaapokki', 'din'],
+          urls: ['assets/fonts/jaapokki/jaapokki.css', 'assets/fonts/din/din.css']
         }
       };
 
